@@ -2,19 +2,28 @@ use bevy::prelude::*;
 
 fn main() {
     App::new()
-        .add_systems(PreStartup, setup)
-        .add_systems(Update, say_hello)
-        .add_systems(Update, say_job)
-        .add_systems(Update, people_with_jobs)
-        .add_systems(Update, people_without_jobs)
-        .add_systems(Update, jobs)
-        .add_systems(Update, hello_world_system)
+        //.add_plugins(DefaultPlugins)
+        .add_plugins(PeoplePlugin)
         .run();
     println!("Main says, 'Hello, world!' as it exits");
 }
 
 fn hello_world_system() {
     println!("a system says, 'Hello, world!'");
+}
+
+struct PeoplePlugin;
+
+impl Plugin for PeoplePlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(PreStartup, setup)
+            .add_systems(Update, say_hello)
+            .add_systems(Update, say_job)
+            .add_systems(Update, people_with_jobs)
+            .add_systems(Update, people_without_jobs)
+            .add_systems(Update, jobs)
+            .add_systems(Startup, hello_world_system);
+    }
 }
 
 fn setup(mut commands: Commands) {
